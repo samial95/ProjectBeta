@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, Plus, MapPin } from "lucide-react";
+import { Plus, MapPin } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
