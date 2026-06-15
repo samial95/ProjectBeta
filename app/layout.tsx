@@ -22,7 +22,7 @@ const montserrat = Montserrat({
 });
 
 export const metadata: Metadata = {
-  title: "Voyex — Where Your Dreams Take Flight",
+  title: "Voyex Beta — Where Your Dreams Take Flight",
   description:
     "Quote, verify, and confirm private jet charter trips for VIP principals.",
 };

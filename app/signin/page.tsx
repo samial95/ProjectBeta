@@ -2,7 +2,7 @@ import { Suspense } from "react";
 import { SignInForm } from "@/components/voyex/sign-in-form";
 
 export const metadata = {
-  title: "Sign in — Voyex",
+  title: "Sign in — Voyex Beta",
 };
 
 export default function SignInPage() {
