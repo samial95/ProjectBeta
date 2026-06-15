@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import {
   Sparkles,
@@ -19,7 +20,6 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { LandingNav } from "@/components/voyex/landing/landing-nav";
-import { JetIllustration } from "@/components/voyex/landing/jet-illustration";
 
 const STATS = [
   { value: "500+", label: "Aircraft Worldwide" },
@@ -56,12 +56,12 @@ const SERVICES = [
 ];
 
 const FLEET = [
-  { tier: "Light Jet", range: "1,500 nm", pax: "5–7 pax" },
-  { tier: "Midsize", range: "2,800 nm", pax: "7–8 pax" },
-  { tier: "Super Midsize", range: "3,600 nm", pax: "8–9 pax" },
-  { tier: "Heavy", range: "4,800 nm", pax: "10–14 pax" },
-  { tier: "Ultra Long Range", range: "7,700 nm", pax: "12–19 pax" },
-  { tier: "VIP Airliner", range: "Global", pax: "19–50 pax" },
+  { tier: "Light Jet", range: "1,500 nm", pax: "5–7 pax", image: "/fleet/light-jet.jpg" },
+  { tier: "Midsize", range: "2,800 nm", pax: "7–8 pax", image: "/fleet/midsize.jpg" },
+  { tier: "Super Midsize", range: "3,600 nm", pax: "8–9 pax", image: "/fleet/super-midsize.jpg" },
+  { tier: "Heavy", range: "4,800 nm", pax: "10–14 pax", image: "/fleet/heavy.jpg" },
+  { tier: "Ultra Long Range", range: "7,700 nm", pax: "12–19 pax", image: "/fleet/ultra-long-range.jpg" },
+  { tier: "VIP Airliner", range: "Global", pax: "19–50 pax", image: "/fleet/vip-airliner.jpg" },
 ];
 
 const LIFESTYLE = [
@@ -317,8 +317,15 @@ export function LandingPage() {
                 viewport={{ once: true, margin: "-60px" }}
                 className="rounded-2xl border border-[var(--color-border)] navy-panel overflow-hidden"
               >
-                <div className="h-32 relative flex items-center justify-center border-b border-[var(--color-border)] bg-[rgba(10,10,10,0.5)] overflow-hidden">
-                  <JetIllustration className="w-[150%] h-auto opacity-80" />
+                <div className="h-32 relative border-b border-[var(--color-border)] bg-[rgba(10,10,10,0.5)] overflow-hidden">
+                  <Image
+                    src={f.image}
+                    alt={`${f.tier} private jet`}
+                    fill
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    className="object-cover transition-transform duration-700 hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[rgba(10,10,10,0.55)] to-transparent" />
                 </div>
                 <div className="p-6 flex items-center justify-between">
                   <div className="flex items-center gap-2">
