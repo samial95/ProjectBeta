@@ -13,6 +13,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
+import { AircraftSilhouette } from "@/components/voyex/aircraft-silhouette";
 import { cn } from "@/lib/utils";
 import { formatUsd } from "@/lib/mock-data";
 import type { BrokerOffer } from "@/lib/customer-data";
@@ -81,9 +82,17 @@ export function OfferCard({
         <div className="text-[11px] uppercase tracking-[0.14em] text-[var(--color-fg-3)]">
           Aircraft
         </div>
-        <div className="text-sm text-white">{offer.aircraft}</div>
-        <div className="text-xs text-[var(--color-fg-2)] mt-1">
-          {offer.operator}
+        <div className="flex items-center gap-3">
+          <AircraftSilhouette
+            model={offer.aircraft}
+            className="h-7 w-[68px] text-[var(--color-accent)] shrink-0"
+          />
+          <div className="min-w-0">
+            <div className="text-sm text-white">{offer.aircraft}</div>
+            <div className="text-xs text-[var(--color-fg-2)] mt-0.5">
+              {offer.operator}
+            </div>
+          </div>
         </div>
         <div className="text-[11px] text-[var(--color-fg-3)]">
           {offer.operatorSafety}

@@ -2,6 +2,7 @@ import { Plane } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Table, THead, TBody, TR, TH, TD } from "@/components/ui/table";
+import { AircraftSilhouette } from "@/components/voyex/aircraft-silhouette";
 import { PageContainer } from "@/components/voyex/page-header";
 import { sovereignFleet, type FleetAircraft } from "@/lib/operator-data";
 import { cn } from "@/lib/utils";
@@ -95,7 +96,15 @@ export default function FleetPage() {
                   <TD className="pl-6 font-mono text-[13px] text-[var(--color-fg)]">
                     {a.tail}
                   </TD>
-                  <TD className="text-sm text-[var(--color-fg)]">{a.type}</TD>
+                  <TD className="text-sm text-[var(--color-fg)]">
+                    <span className="inline-flex items-center gap-3">
+                      <AircraftSilhouette
+                        model={a.type}
+                        className="h-5 w-[52px] text-[var(--color-accent)]"
+                      />
+                      {a.type}
+                    </span>
+                  </TD>
                   <TD className="font-mono text-[12px] text-[var(--color-fg-2)]">
                     {a.yearBuild} · {a.hoursSinceNew.toLocaleString()}
                   </TD>
