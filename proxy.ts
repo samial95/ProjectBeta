@@ -30,7 +30,9 @@ export function proxy(request: NextRequest) {
       ? "/trips"
       : session.role === "operator"
         ? "/operator"
-        : "/client";
+        : session.role === "ambassador"
+          ? "/ambassador"
+          : "/client";
 
   const wantsOperator =
     pathname === "/operator" || pathname.startsWith("/operator/");
@@ -41,6 +43,8 @@ export function proxy(request: NextRequest) {
     pathname.startsWith("/trips/") ||
     pathname.startsWith("/principals") ||
     pathname.startsWith("/checkout");
+  const wantsAmbassador =
+    pathname === "/ambassador" || pathname.startsWith("/ambassador/");
 
   if (wantsOperator && session.role !== "operator") {
     return NextResponse.redirect(new URL(home, request.url));
@@ -49,6 +53,9 @@ export function proxy(request: NextRequest) {
     return NextResponse.redirect(new URL(home, request.url));
   }
   if (wantsBroker && session.role !== "broker") {
+    return NextResponse.redirect(new URL(home, request.url));
+  }
+  if (wantsAmbassador && session.role !== "ambassador") {
     return NextResponse.redirect(new URL(home, request.url));
   }
 

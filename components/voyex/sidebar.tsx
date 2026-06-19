@@ -15,6 +15,8 @@ import {
   Search,
   Heart,
   CreditCard,
+  LayoutDashboard,
+  Wallet,
   type LucideIcon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -79,10 +81,30 @@ const CUSTOMER_NAV: NavItem[] = [
   { label: "Settings", href: "/client/settings", icon: Settings },
 ];
 
+const AMBASSADOR_NAV: NavItem[] = [
+  {
+    label: "Dashboard",
+    href: "/ambassador",
+    icon: LayoutDashboard,
+    match: (p) => p === "/ambassador",
+  },
+  { label: "Referrals", href: "/ambassador/referrals", icon: Users },
+  { label: "Earnings", href: "/ambassador/payouts", icon: Wallet },
+  { label: "Settings", href: "/ambassador/settings", icon: Settings },
+];
+
 const WORKSPACE_LABEL: Record<Session["role"], string> = {
   broker: "Broker workspace",
   operator: "Operator workspace",
   customer: "Traveler",
+  ambassador: "Ambassador",
+};
+
+const DOT_COLOR: Record<Session["role"], string> = {
+  broker: "bg-[var(--color-accent)]",
+  operator: "bg-[var(--color-info)]",
+  customer: "bg-[var(--color-ok)]",
+  ambassador: "bg-[var(--color-warn)]",
 };
 
 export function Sidebar({ session }: { session: Session }) {
@@ -93,7 +115,9 @@ export function Sidebar({ session }: { session: Session }) {
       ? BROKER_NAV
       : session.role === "operator"
         ? OPERATOR_NAV
-        : CUSTOMER_NAV;
+        : session.role === "ambassador"
+          ? AMBASSADOR_NAV
+          : CUSTOMER_NAV;
 
   const isActive = (item: NavItem) => {
     if (item.match) return item.match(pathname);
@@ -109,14 +133,7 @@ export function Sidebar({ session }: { session: Session }) {
         </Link>
         <div className="mt-4 inline-flex items-center gap-1.5 px-2.5 py-1 border border-[var(--color-border)] rounded-full">
           <span
-            className={cn(
-              "h-1.5 w-1.5 rounded-full",
-              session.role === "broker"
-                ? "bg-[var(--color-accent)]"
-                : session.role === "operator"
-                  ? "bg-[var(--color-info)]"
-                  : "bg-[var(--color-ok)]"
-            )}
+            className={cn("h-1.5 w-1.5 rounded-full", DOT_COLOR[session.role])}
           />
           <span className="text-[10px] uppercase tracking-[0.18em] text-[var(--color-fg-2)]">
             {WORKSPACE_LABEL[session.role]}

@@ -8,51 +8,94 @@ import {
   ArrowRight,
   Globe2,
   ShieldCheck,
-  Crown,
-  ConciergeBell,
-  Plane,
-  Tag,
-  FileText,
-  Repeat,
-  Cross,
-  Package,
   Route,
+  MessageSquare,
+  Tag,
+  Lock,
+  PlaneTakeoff,
+  UserRound,
+  Inbox,
+  Building2,
+  Megaphone,
+  Plane,
+  Crown,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { LandingNav } from "@/components/voyex/landing/landing-nav";
 
 const STATS = [
-  { value: "500+", label: "Aircraft Worldwide" },
+  { value: "500+", label: "Verified aircraft" },
   { value: "1,200+", label: "Destinations" },
-  { value: "360°", label: "Lifestyle Service" },
-  { value: "24/7", label: "Private Concierge" },
+  { value: "30 min", label: "Operator response SLA" },
+  { value: "24/7", label: "AI concierge" },
 ];
 
 const VALUES = [
   {
     icon: Globe2,
-    title: "Your access to the world",
-    body: "From a single call to wheels-up — intercontinental travel arranged around your schedule, never the other way around.",
+    title: "One request, competing offers",
+    body: "Tell us your trip once — or just chat with our concierge. Vetted brokers and operators come back with their best all-in offers for you to compare.",
   },
   {
     icon: ShieldCheck,
-    title: "Voyage with confidence",
-    body: "Every operator is vetted and verified, every aircraft compliant, every journey insured and escrow-secured.",
+    title: "Verified & escrow-secured",
+    body: "Every broker and operator is vetted and verified. Your payment is held in escrow and released only when your aircraft is confirmed.",
   },
   {
-    icon: Crown,
-    title: "The ultimate experience in the sky",
-    body: "Bespoke cabins, curated catering and personalized aviation experiences crafted for the most discerning traveler.",
+    icon: Route,
+    title: "Orchestrated end-to-end",
+    body: "From offer to wheels-up: message your broker or operator, share passports in a secure vault, and track every step of the trip.",
   },
 ];
 
-const SERVICES = [
-  { icon: Tag, label: "Sales" },
-  { icon: FileText, label: "Lease" },
-  { icon: Plane, label: "Helicopter" },
-  { icon: Package, label: "Cargo" },
-  { icon: Cross, label: "Air Ambulance" },
-  { icon: Route, label: "Flight Program" },
+const STEPS = [
+  {
+    icon: MessageSquare,
+    step: "01",
+    title: "Tell us your trip",
+    body: "Post a request or chat with the Voyex concierge — route, dates, guests and preferences.",
+  },
+  {
+    icon: Tag,
+    step: "02",
+    title: "Compare offers",
+    body: "Vetted operators respond within 30 minutes, brokers within an hour — with all-in pricing.",
+  },
+  {
+    icon: Lock,
+    step: "03",
+    title: "Pay into escrow",
+    body: "Card, Apple Pay or crypto. Funds are held safely until your aircraft is confirmed.",
+  },
+  {
+    icon: PlaneTakeoff,
+    step: "04",
+    title: "Fly & track",
+    body: "Chat with your broker or operator, share documents securely, and track the whole trip.",
+  },
+];
+
+const PERSONAS = [
+  {
+    icon: UserRound,
+    title: "Travellers",
+    body: "Compare competing offers, pay into escrow, and manage your trip in one place.",
+  },
+  {
+    icon: Inbox,
+    title: "Brokers",
+    body: "Receive traveller requests directly, send all-in offers, and manage your principals.",
+  },
+  {
+    icon: Building2,
+    title: "Operators",
+    body: "Win charters by responding to live requests from travellers — no middle-man markup.",
+  },
+  {
+    icon: Megaphone,
+    title: "Ambassadors",
+    body: "Refer travellers with your code or link and earn royalties on every flight they take.",
+  },
 ];
 
 const FLEET = [
@@ -62,29 +105,6 @@ const FLEET = [
   { tier: "Heavy", range: "4,800 nm", pax: "10–14 pax", image: "/fleet/heavy.jpg" },
   { tier: "Ultra Long Range", range: "7,700 nm", pax: "12–19 pax", image: "/fleet/ultra-long-range.jpg" },
   { tier: "VIP Airliner", range: "Global", pax: "19–50 pax", image: "/fleet/vip-airliner.jpg" },
-];
-
-const LIFESTYLE = [
-  {
-    icon: ConciergeBell,
-    title: "Lifestyle & Concierge",
-    body: "Yachts, residences, dining, security and the details in between — handled.",
-  },
-  {
-    icon: Globe2,
-    title: "Travel & Experiences",
-    body: "Curated journeys and once-in-a-lifetime experiences across every continent.",
-  },
-  {
-    icon: Crown,
-    title: "Events & Partnerships",
-    body: "Access to the world's most exclusive events through our partner network.",
-  },
-  {
-    icon: Repeat,
-    title: "Membership",
-    body: "Guaranteed availability and preferred pricing for our members.",
-  },
 ];
 
 const fadeUp = {
@@ -121,13 +141,26 @@ export function LandingPage() {
       {/* HERO */}
       <section
         id="home"
-        className="hero-purple relative min-h-screen flex flex-col items-center justify-center text-center px-6 pt-28 pb-24"
+        className="hero-purple relative min-h-screen flex flex-col items-center justify-center text-center px-6 pt-28 pb-24 overflow-hidden"
       >
+        {/* Side-profile jet backdrop, recolored to the brand purple */}
+        <div className="absolute inset-0 z-0">
+          <Image
+            src="/hero-side.jpg"
+            alt=""
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover object-[center_42%]"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-[rgba(16,7,28,0.92)] via-transparent to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[rgba(14,6,24,1)] via-[rgba(22,10,38,0.82)] to-[rgba(20,9,34,0.15)]" />
+        </div>
         <motion.div
           initial={{ opacity: 0, y: -12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="flex flex-col items-center"
+          className="relative z-10 flex flex-col items-center"
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
@@ -141,11 +174,11 @@ export function LandingPage() {
           initial={{ opacity: 0, y: -8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.15 }}
-          className="mt-10 inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-white/25 bg-white/5"
+          className="relative z-10 mt-10 inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-white/25 bg-white/5"
         >
           <Sparkles className="h-3.5 w-3.5 text-white/80" />
           <span className="text-[11px] uppercase tracking-[0.24em] text-white/80">
-            Private Jet &amp; Luxury Lifestyle
+            The private aviation marketplace
           </span>
         </motion.div>
 
@@ -153,39 +186,40 @@ export function LandingPage() {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.25 }}
-          className="mt-8 font-serif font-light text-[clamp(2.5rem,7vw,5.25rem)] leading-[1.08] text-white tracking-[0.01em]"
+          className="relative z-10 mt-8 font-serif font-light text-[clamp(2.5rem,7vw,5.25rem)] leading-[1.08] text-white tracking-[0.01em]"
         >
-          Where Your Dreams Take Flight
+          Private aviation, on your terms
         </motion.h1>
 
         <motion.p
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.35 }}
-          className="mt-6 mx-auto max-w-[560px] text-base sm:text-lg text-white/75 leading-relaxed"
+          className="relative z-10 mt-6 mx-auto max-w-[600px] text-base sm:text-lg text-white/75 leading-relaxed"
         >
-          A private jet company and luxury solutions lifestyle brand —
-          your access to the world.
+          Post one request — or just tell our concierge. Vetted brokers and
+          operators respond directly with competing all-in offers. Compare, pay
+          into escrow, and we orchestrate the trip end-to-end.
         </motion.p>
 
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.45 }}
-          className="mt-12 flex items-center justify-center gap-5 flex-wrap"
+          className="relative z-10 mt-12 flex items-center justify-center gap-5 flex-wrap"
         >
           <Link
             href="/signin"
             className="inline-flex items-center gap-2 rounded-full border border-white/60 px-9 py-3.5 text-sm uppercase tracking-[0.18em] text-white transition-colors hover:bg-white hover:text-[#4e2178]"
           >
-            Book your voyage
+            Get competing offers
             <ArrowRight className="h-4 w-4" />
           </Link>
           <Link
-            href="/signin"
+            href="#how"
             className="text-sm uppercase tracking-[0.18em] text-white/70 hover:text-white transition-colors"
           >
-            Enquire here
+            See how it works
           </Link>
         </motion.div>
       </section>
@@ -219,8 +253,9 @@ export function LandingPage() {
         <div className="mx-auto max-w-[820px] text-center">
           <Sparkles className="h-5 w-5 text-[var(--color-accent)] mx-auto" />
           <blockquote className="mt-6 font-serif font-light text-[clamp(1.6rem,3.4vw,2.6rem)] leading-snug text-white">
-            “Most people say, <span className="text-[var(--color-fg-3)]">the sky&apos;s the limit.</span>{" "}
-            We say, <span className="gold-text font-normal">it starts from there.</span>”
+            “Chartering a jet shouldn&apos;t mean{" "}
+            <span className="text-[var(--color-fg-3)]">endless phone calls.</span>{" "}
+            One request. <span className="gold-text font-normal">Every jet competes.</span>”
           </blockquote>
           <div className="mt-6 text-[11px] uppercase tracking-[0.22em] text-[var(--color-fg-3)]">
             The Voyex Philosophy
@@ -260,34 +295,44 @@ export function LandingPage() {
         </div>
       </section>
 
-      {/* SERVICES */}
-      <section id="services" className="relative px-6 py-24">
+      {/* HOW IT WORKS */}
+      <section id="how" className="relative px-6 py-24">
         <div className="mx-auto max-w-[1100px]">
           <div className="text-center mb-14">
             <div className="text-[11px] uppercase tracking-[0.24em] text-[var(--color-accent)]">
-              Private Jet Services
+              How it works
             </div>
             <h2 className="mt-3 font-serif font-light text-[clamp(2rem,4vw,3rem)] text-white">
-              One partner, every requirement
+              From request to wheels-up
             </h2>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
-            {SERVICES.map((s, i) => {
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {STEPS.map((s, i) => {
               const Icon = s.icon;
               return (
                 <motion.div
-                  key={s.label}
+                  key={s.step}
                   variants={fadeUp}
                   custom={i}
                   initial="hidden"
                   whileInView="show"
                   viewport={{ once: true, margin: "-40px" }}
-                  className="flex flex-col items-center gap-3 rounded-xl border border-[var(--color-border)] navy-panel py-6 px-3 text-center transition-colors hover:border-[var(--color-accent-border)]"
+                  className="rounded-2xl border border-[var(--color-border)] navy-panel p-6 transition-colors hover:border-[var(--color-accent-border)]"
                 >
-                  <Icon className="h-5 w-5 text-[var(--color-accent)]" />
-                  <span className="text-[12px] uppercase tracking-[0.12em] text-[var(--color-fg-2)]">
-                    {s.label}
-                  </span>
+                  <div className="flex items-center justify-between">
+                    <div className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-[var(--color-accent-border)] bg-[var(--color-accent-soft)]">
+                      <Icon className="h-5 w-5 text-[var(--color-accent)]" />
+                    </div>
+                    <span className="font-mono text-sm text-[var(--color-fg-3)]">
+                      {s.step}
+                    </span>
+                  </div>
+                  <h3 className="mt-5 font-serif font-normal text-lg text-white">
+                    {s.title}
+                  </h3>
+                  <p className="mt-2 text-[13px] text-[var(--color-fg-2)] leading-relaxed">
+                    {s.body}
+                  </p>
                 </motion.div>
               );
             })}
@@ -345,36 +390,38 @@ export function LandingPage() {
         </div>
       </section>
 
-      {/* LIFESTYLE */}
-      <section id="lifestyle" className="relative px-6 py-24">
+      {/* WHO IT'S FOR */}
+      <section id="personas" className="relative px-6 py-24">
         <div className="mx-auto max-w-[1100px]">
           <div className="text-center mb-14">
             <div className="text-[11px] uppercase tracking-[0.24em] text-[var(--color-accent)]">
-              360° Lifestyle
+              Who it&apos;s for
             </div>
             <h2 className="mt-3 font-serif font-light text-[clamp(2rem,4vw,3rem)] text-white">
-              Beyond the flight
+              One platform, every side of the trip
             </h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {LIFESTYLE.map((f, i) => {
-              const Icon = f.icon;
+            {PERSONAS.map((p, i) => {
+              const Icon = p.icon;
               return (
                 <motion.div
-                  key={f.title}
+                  key={p.title}
                   variants={fadeUp}
                   custom={i}
                   initial="hidden"
                   whileInView="show"
                   viewport={{ once: true, margin: "-50px" }}
-                  className="rounded-2xl border border-[var(--color-border)] navy-panel p-6"
+                  className="rounded-2xl border border-[var(--color-border)] navy-panel p-7 transition-all hover:border-[var(--color-accent-border)] hover:-translate-y-1"
                 >
-                  <Icon className="h-5 w-5 text-[var(--color-accent)]" />
-                  <h3 className="mt-4 font-serif font-normal text-base text-white">
-                    {f.title}
+                  <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl border border-[var(--color-accent-border)] bg-[var(--color-accent-soft)]">
+                    <Icon className="h-5 w-5 text-[var(--color-accent)]" />
+                  </div>
+                  <h3 className="mt-5 font-serif font-normal text-lg text-white">
+                    {p.title}
                   </h3>
                   <p className="mt-2 text-[13px] text-[var(--color-fg-2)] leading-relaxed">
-                    {f.body}
+                    {p.body}
                   </p>
                 </motion.div>
               );
@@ -383,22 +430,21 @@ export function LandingPage() {
         </div>
       </section>
 
-      {/* MEMBERSHIP CTA */}
+      {/* CTA */}
       <section id="membership" className="relative px-6 py-24">
         <div className="mx-auto max-w-[900px] text-center rounded-3xl border border-[var(--color-accent-border)] navy-panel gold-glow px-8 py-16">
           <div className="inline-flex items-center gap-2 text-[var(--color-accent)]">
             <Crown className="h-4 w-4" />
             <span className="text-[11px] uppercase tracking-[0.24em]">
-              Membership
+              Get started
             </span>
           </div>
           <h2 className="mt-5 font-serif font-light text-[clamp(2rem,4.5vw,3.25rem)] text-white leading-tight">
-            Voyage with confidence
+            Enter the marketplace
           </h2>
           <p className="mt-4 mx-auto max-w-[560px] text-[var(--color-fg-2)]">
-            Sign in to source verified quotes, manage your principals, or
-            respond to inbound charter requests — your entire operation in one
-            orchestration layer.
+            Sign in as a traveller, broker, operator or ambassador — one platform
+            that connects every side of private aviation.
           </p>
           <div className="mt-8 flex items-center justify-center gap-4 flex-wrap">
             <Button asChild size="lg" className="gap-2">
@@ -429,7 +475,7 @@ export function LandingPage() {
             </span>
           </div>
           <div className="text-xs text-[var(--color-fg-3)]">
-            © 2026 Voyex · Where your dreams take flight · Investor demo
+            © 2026 Voyex · The private aviation marketplace · Investor demo
           </div>
           <Link
             href="/signin"

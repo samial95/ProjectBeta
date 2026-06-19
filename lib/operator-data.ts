@@ -36,6 +36,7 @@ export interface InboundRfq {
   rank?: number;
   competitors?: number;
   expiresIn?: string;
+  slaSecondsLeft?: number; // time left to respond under the 30-min operator SLA
 }
 
 export interface FleetAircraft {
@@ -115,10 +116,11 @@ export const inboundRfqs: InboundRfq[] = [
     aircraftPref: "Heavy",
     budgetMin: 62000,
     budgetMax: 78000,
-    receivedAgo: "34 min ago",
+    receivedAgo: "12 min ago",
     status: "needs_quote",
     expiresIn: "1h 26m",
     competitors: 2,
+    slaSecondsLeft: 1104,
   },
   {
     id: "VYX-2026-0839",
@@ -246,7 +248,7 @@ export const rfqDetails: Record<string, RfqDetail> = {
   "VYX-2026-0847": {
     ...inboundRfqs[0],
     clientNote:
-      "Returning client · 47 prior bookings on Voyex · KYC current · no operator restrictions",
+      "Returning traveller · 47 prior bookings on Voyex · KYC current · no operator restrictions",
     catering: "Halal · child car seats at LTN",
     groundTransport: "Ground transport to Mayfair",
     yourAircraft: "A6-SJP · Global 7500",
@@ -257,3 +259,21 @@ export const rfqDetails: Record<string, RfqDetail> = {
     totalQuotes: 3,
   },
 };
+
+// Every inbound RFQ should open a working detail. Use the rich record if we
+// have one, otherwise synthesise a sensible detail from the list row.
+export function getRfqDetail(id: string): RfqDetail | undefined {
+  if (rfqDetails[id]) return rfqDetails[id];
+  const base = inboundRfqs.find((r) => r.id === id);
+  if (!base) return undefined;
+  return {
+    ...base,
+    clientNote:
+      "Verified traveller · KYC current · sanctions clear · no operator restrictions",
+    catering: "Catering & ground transport per traveller brief",
+    groundTransport: "On request",
+    bidWindowOpened: `received ${base.receivedAgo}`,
+    bidWindowCloses: base.date,
+    totalQuotes: (base.competitors ?? 0) + (base.yourQuote ? 1 : 0),
+  };
+}

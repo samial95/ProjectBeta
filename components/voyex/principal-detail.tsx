@@ -6,12 +6,41 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Table, THead, TBody, TR, TH, TD } from "@/components/ui/table";
+import { TripChat } from "@/components/voyex/client/trip/trip-chat";
+import { SelfVault } from "@/components/voyex/shared/self-vault";
+import type { VaultDoc } from "@/components/voyex/client/trip/trip-vault";
 import { formatUsd } from "@/lib/mock-data";
 import type { PrincipalDetail } from "@/types";
 
-function ProfileSection({ p }: { p: PrincipalDetail }) {
+const PRINCIPAL_QUICK_REPLIES = [
+  { q: "I'll send Geneva options shortly", a: "Wonderful — thank you, Sarah." },
+  {
+    q: "Are all passenger passports current?",
+    a: "Yes, all current — I'll confirm them in the vault.",
+  },
+  { q: "Same catering as last time?", a: "Yes please — halal, no shellfish." },
+  {
+    q: "Shall I hold the Global 7500?",
+    a: "Please do — the family loved it last time.",
+  },
+];
+
+const BROKER_DOCS: VaultDoc[] = [
+  { id: "master", name: "Master charter agreement", meta: "Signed · renews annually" },
+  { id: "policy", name: "Corporate travel policy", meta: "Approval rules on file" },
+];
+
+function principalDocs(name: string): VaultDoc[] {
+  return [
+    { id: "kyc", name: "KYC / source of funds", meta: "Verified" },
+    { id: "pp-lead", name: `Passport · ${name}`, meta: "Lead principal" },
+    { id: "pp-family", name: "Passports · family & staff", meta: "6 on file" },
+  ];
+}
+
+function PreferencesSection({ p }: { p: PrincipalDetail }) {
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 pb-32">
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 py-6 pb-32">
       <Card>
         <CardHeader>
           <CardTitle>Travel preferences</CardTitle>
@@ -42,10 +71,7 @@ function ProfileSection({ p }: { p: PrincipalDetail }) {
         <CardContent>
           <ul className="space-y-4">
             {p.approval.map((step, i) => (
-              <li
-                key={step.range}
-                className="flex items-start gap-3"
-              >
+              <li key={step.range} className="flex items-start gap-3">
                 <span className="font-mono text-xs text-[var(--color-accent)] mt-0.5 w-5 shrink-0">
                   0{i + 1}
                 </span>
@@ -62,7 +88,13 @@ function ProfileSection({ p }: { p: PrincipalDetail }) {
           </ul>
         </CardContent>
       </Card>
+    </div>
+  );
+}
 
+function ProfileSection({ p }: { p: PrincipalDetail }) {
+  return (
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 py-6 pb-32">
       <Card>
         <CardHeader>
           <CardTitle>Travel companions</CardTitle>
@@ -99,8 +131,14 @@ function ProfileSection({ p }: { p: PrincipalDetail }) {
           </ul>
         </CardContent>
       </Card>
+    </div>
+  );
+}
 
-      <Card className="lg:col-span-2">
+function TripsSection({ p }: { p: PrincipalDetail }) {
+  return (
+    <div className="py-6 pb-32">
+      <Card>
         <CardHeader>
           <CardTitle>Recent trips</CardTitle>
         </CardHeader>
@@ -174,24 +212,39 @@ export function PrincipalDetailPane({ p }: { p: PrincipalDetail }) {
           <TabsList>
             <TabsTrigger value="profile">Profile</TabsTrigger>
             <TabsTrigger value="preferences">Preferences</TabsTrigger>
-            <TabsTrigger value="approval">Approval Chain</TabsTrigger>
-            <TabsTrigger value="trips">Recent Trips</TabsTrigger>
+            <TabsTrigger value="conversation">Conversation</TabsTrigger>
             <TabsTrigger value="documents">Documents</TabsTrigger>
+            <TabsTrigger value="trips">Recent Trips</TabsTrigger>
           </TabsList>
           <TabsContent value="profile">
             <ProfileSection p={p} />
           </TabsContent>
           <TabsContent value="preferences">
-            <ProfileSection p={p} />
+            <PreferencesSection p={p} />
           </TabsContent>
-          <TabsContent value="approval">
-            <ProfileSection p={p} />
-          </TabsContent>
-          <TabsContent value="trips">
-            <ProfileSection p={p} />
+          <TabsContent value="conversation">
+            <div className="py-6 pb-32 max-w-[640px]">
+              <TripChat
+                name={p.name}
+                initials={p.initials}
+                role="Principal"
+                company={p.office}
+                greeting={`Hi Sarah — thanks again for the Dubai arrangements. Could you look at Geneva options for the family next month?`}
+                quickReplies={PRINCIPAL_QUICK_REPLIES}
+              />
+            </div>
           </TabsContent>
           <TabsContent value="documents">
-            <ProfileSection p={p} />
+            <div className="py-6 pb-32 max-w-[640px]">
+              <SelfVault
+                counterparty={p.name}
+                myDocs={BROKER_DOCS}
+                theirDocs={principalDocs(p.name)}
+              />
+            </div>
+          </TabsContent>
+          <TabsContent value="trips">
+            <TripsSection p={p} />
           </TabsContent>
         </Tabs>
       </div>

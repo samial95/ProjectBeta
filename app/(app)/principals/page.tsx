@@ -12,7 +12,7 @@ export default function PrincipalsPage() {
   const detail = catherine;
 
   return (
-    <div className="flex items-stretch min-h-screen">
+    <div className="flex flex-col xl:flex-row items-stretch min-h-screen">
       <PrincipalList
         principals={principals}
         selectedId={selectedId}

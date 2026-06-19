@@ -1,6 +1,7 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { Sidebar } from "@/components/voyex/sidebar";
+import { ConciergeBubble } from "@/components/voyex/client/concierge/concierge-bubble";
 import { SESSION_COOKIE, decodeSession } from "@/lib/session";
 
 export default async function AuthedLayout({
@@ -19,6 +20,7 @@ export default async function AuthedLayout({
     <div className="flex min-h-screen">
       <Sidebar session={session} />
       <main className="flex-1 min-w-0">{children}</main>
+      {session.role === "customer" && <ConciergeBubble />}
     </div>
   );
 }

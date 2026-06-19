@@ -19,7 +19,7 @@ export function PrincipalList({
   onSelect: (id: string) => void;
 }) {
   return (
-    <div className="w-[320px] shrink-0 border-r border-[var(--color-border)] h-[calc(100vh-0px)] overflow-y-auto">
+    <div className="w-full xl:w-[320px] shrink-0 border-b xl:border-b-0 xl:border-r border-[var(--color-border)] max-h-[40vh] xl:max-h-none xl:h-screen overflow-y-auto">
       <div className="px-6 pt-8 pb-3">
         <div className="text-[11px] uppercase tracking-[0.18em] text-[var(--color-fg-3)]">
           Principals

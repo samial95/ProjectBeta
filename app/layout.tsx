@@ -21,10 +21,39 @@ const montserrat = Montserrat({
   display: "swap",
 });
 
+const siteUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL
+  ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+  : "http://localhost:3002";
+
+const title = "Voyex — Where Your Dreams Take Flight";
+const description =
+  "A private jet company and luxury lifestyle brand — your access to the world.";
+
 export const metadata: Metadata = {
-  title: "Voyex Beta — Where Your Dreams Take Flight",
-  description:
-    "Quote, verify, and confirm private jet charter trips for VIP principals.",
+  metadataBase: new URL(siteUrl),
+  title,
+  description,
+  openGraph: {
+    title,
+    description,
+    url: "/",
+    siteName: "Voyex",
+    type: "website",
+    images: [
+      {
+        url: "/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Voyex — Private Jet & Luxury Lifestyle",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title,
+    description,
+    images: ["/og-image.jpg"],
+  },
 };
 
 export default function RootLayout({

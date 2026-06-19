@@ -1,5 +1,5 @@
-import { RequestForm } from "@/components/voyex/client/request-form";
+import { NewRequestExperience } from "@/components/voyex/client/new-request-experience";
 
 export default function NewRequestPage() {
-  return <RequestForm />;
+  return <NewRequestExperience />;
 }

@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { ArrowUpRight, ChevronRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { cn } from "@/lib/utils";
 import { formatUsd } from "@/lib/mock-data";
+import { SlaCountdown } from "@/components/voyex/sla-countdown";
 import type { InboundRfq } from "@/lib/operator-data";
 
 const STATUS: Record<
@@ -88,24 +88,21 @@ export function RfqRow({ r }: { r: InboundRfq }) {
         </div>
 
         <div className="col-span-12 lg:col-span-2 flex items-center justify-end gap-3">
-          {r.expiresIn &&
-            (r.status === "needs_quote" || r.status === "quote_sent") && (
+          {r.status === "needs_quote" && r.slaSecondsLeft != null ? (
+            <SlaCountdown seconds={r.slaSecondsLeft} capMinutes={30} />
+          ) : (
+            r.expiresIn &&
+            r.status === "quote_sent" && (
               <div className="text-right">
-                <div
-                  className={cn(
-                    "font-mono text-[11px]",
-                    r.status === "needs_quote"
-                      ? "text-[var(--color-warn)]"
-                      : "text-[var(--color-fg-2)]"
-                  )}
-                >
+                <div className="font-mono text-[11px] text-[var(--color-fg-2)]">
                   {r.expiresIn}
                 </div>
                 <div className="text-[10px] uppercase tracking-[0.14em] text-[var(--color-fg-3)]">
-                  {r.status === "needs_quote" ? "Respond by" : "Bid expires"}
+                  Bid expires
                 </div>
               </div>
-            )}
+            )
+          )}
           <ChevronRight className="h-4 w-4 text-[var(--color-fg-3)]" />
         </div>
       </div>

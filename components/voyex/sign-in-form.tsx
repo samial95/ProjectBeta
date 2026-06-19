@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { Inbox, Building2, UserRound, ArrowRight, Lock } from "lucide-react";
+import { Inbox, Building2, UserRound, Megaphone, ArrowRight, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
@@ -11,6 +12,7 @@ import {
   BROKER_SESSION,
   OPERATOR_SESSION,
   CUSTOMER_SESSION,
+  AMBASSADOR_SESSION,
   sessionFor,
   type Role,
 } from "@/lib/session";
@@ -28,11 +30,11 @@ const ROLES: {
     org: CUSTOMER_SESSION.org,
     icon: UserRound,
     blurb:
-      "Post a trip request, compare competing broker offers, and pay a deposit to confirm.",
+      "Post a trip request, compare competing broker offers, and secure your trip in escrow.",
   },
   {
     id: "broker",
-    label: "Charter broker",
+    label: "Broker",
     org: BROKER_SESSION.org,
     icon: Inbox,
     blurb:
@@ -46,12 +48,21 @@ const ROLES: {
     blurb:
       "Respond to inbound RFQs, manage your fleet availability, and track quote win rate.",
   },
+  {
+    id: "ambassador",
+    label: "Ambassador",
+    org: AMBASSADOR_SESSION.org,
+    icon: Megaphone,
+    blurb:
+      "Refer travellers with your code or link and earn royalties on every flight they take.",
+  },
 ];
 
 const ROLE_CTA: Record<Role, string> = {
   customer: "traveler",
   broker: "broker",
   operator: "operator",
+  ambassador: "ambassador",
 };
 
 export function SignInForm() {
@@ -63,6 +74,7 @@ export function SignInForm() {
   const next = searchParams.get("next") ?? undefined;
 
   const selected = sessionFor(role);
+  const roleMeta = ROLES.find((r) => r.id === role) ?? ROLES[0];
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -74,8 +86,10 @@ export function SignInForm() {
     <div className="min-h-screen flex flex-col items-center justify-center px-6 py-16 bg-[var(--color-bg)]">
       <div className="w-full max-w-[460px]">
         <div className="flex flex-col items-center mb-12">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/voyex-stacked.svg" alt="Voyex" className="w-28 h-auto" />
+          <Link href="/" aria-label="Back to Voyex home" className="transition-opacity hover:opacity-80">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/voyex-stacked.svg" alt="Voyex" className="w-28 h-auto" />
+          </Link>
         </div>
 
         <div className="border border-[var(--color-border)] bg-[var(--color-surface)] rounded-sm">
@@ -93,54 +107,51 @@ export function SignInForm() {
 
           <Separator />
 
-          <div className="px-8 py-6 space-y-3">
-            {ROLES.map((r) => {
-              const Icon = r.icon;
-              const active = r.id === role;
-              return (
-                <button
-                  key={r.id}
-                  type="button"
-                  onClick={() => setRole(r.id)}
-                  className={cn(
-                    "w-full text-left p-4 border rounded-sm transition-colors flex items-start gap-4",
-                    active
-                      ? "border-[var(--color-accent)] bg-[var(--color-accent-soft)]"
-                      : "border-[var(--color-border)] hover:bg-[var(--color-surface-2)]"
-                  )}
-                  aria-pressed={active}
-                >
-                  <div
+          <div className="px-8 py-6">
+            <div className="grid grid-cols-2 gap-2.5">
+              {ROLES.map((r) => {
+                const Icon = r.icon;
+                const active = r.id === role;
+                return (
+                  <button
+                    key={r.id}
+                    type="button"
+                    onClick={() => setRole(r.id)}
+                    aria-pressed={active}
                     className={cn(
-                      "h-10 w-10 rounded-sm flex items-center justify-center shrink-0 border",
+                      "flex items-center gap-3 rounded-lg border p-3 text-left transition-colors",
                       active
-                        ? "border-[var(--color-accent)] text-[var(--color-accent)] bg-[var(--color-bg)]"
-                        : "border-[var(--color-border)] text-[var(--color-fg-2)]"
+                        ? "border-[var(--color-accent)] bg-[var(--color-accent-soft)]"
+                        : "border-[var(--color-border)] hover:bg-[var(--color-surface-2)]"
                     )}
                   >
-                    <Icon className="h-4 w-4" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center justify-between gap-3">
-                      <div className="text-sm text-[var(--color-fg)] font-medium">
+                    <div
+                      className={cn(
+                        "h-9 w-9 rounded-md flex items-center justify-center shrink-0 border",
+                        active
+                          ? "border-[var(--color-accent)] text-[var(--color-accent)] bg-[var(--color-bg)]"
+                          : "border-[var(--color-border)] text-[var(--color-fg-2)]"
+                      )}
+                    >
+                      <Icon className="h-4 w-4" />
+                    </div>
+                    <div className="min-w-0">
+                      <div className="text-sm text-[var(--color-fg)] font-medium truncate">
                         {r.label}
                       </div>
-                      {active && (
-                        <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-[var(--color-accent)]">
-                          Selected
-                        </span>
-                      )}
+                      <div className="text-[10px] text-[var(--color-fg-3)] truncate">
+                        {r.org}
+                      </div>
                     </div>
-                    <div className="text-xs text-[var(--color-fg-3)] mt-0.5">
-                      {r.org}
-                    </div>
-                    <div className="text-xs text-[var(--color-fg-2)] mt-2 leading-relaxed">
-                      {r.blurb}
-                    </div>
-                  </div>
-                </button>
-              );
-            })}
+                  </button>
+                );
+              })}
+            </div>
+
+            <div className="mt-3 flex items-start gap-2 text-xs text-[var(--color-fg-2)] leading-relaxed">
+              <span className="text-[var(--color-accent)] mt-0.5">›</span>
+              <span>{roleMeta.blurb}</span>
+            </div>
           </div>
 
           <Separator />

@@ -1,40 +1,60 @@
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Clock } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
 import { PageContainer } from "@/components/voyex/page-header";
-import { QuoteCard } from "@/components/voyex/quote-card";
 import { TrustBrief } from "@/components/voyex/trust-brief";
+import { SlaCountdown } from "@/components/voyex/sla-countdown";
+import { TripChat } from "@/components/voyex/client/trip/trip-chat";
+import { SelfVault } from "@/components/voyex/shared/self-vault";
+import { BrokerOfferComposer } from "@/components/voyex/broker/offer-composer";
 import { tripRequest, formatUsd } from "@/lib/mock-data";
 
+const TRAVELLER_QUICK_REPLIES = [
+  { q: "I'll send our best aircraft options shortly", a: "Perfect, thank you." },
+  {
+    q: "Confirming halal catering + child seats",
+    a: "Yes please, and ground transport to Mayfair.",
+  },
+  { q: "I can hold a Global 7500 for you", a: "That sounds ideal." },
+  { q: "Sending our all-in offer now", a: "Great — we'll review and confirm." },
+];
+
 export default function TripRequestPage() {
-  const received = tripRequest.quotes.filter((q) => q.status === "received").length;
-  const pending = tripRequest.quotes.filter((q) => q.status === "pending").length;
+  const bookerInitials = tripRequest.booker
+    .split(" ")
+    .map((w) => w[0])
+    .slice(0, 2)
+    .join("");
 
   return (
     <PageContainer>
-      <div className="flex gap-10 items-start">
-        <div className="flex-1 min-w-0 space-y-8">
+      <div className="flex flex-col xl:flex-row gap-8 xl:gap-10 items-start">
+        <div className="flex-1 min-w-0 w-full space-y-6">
           <header>
-            <div className="flex flex-wrap items-center gap-3">
+            <div className="text-[11px] uppercase tracking-[0.18em] text-[var(--color-accent)]">
+              Trip request · direct from traveller
+            </div>
+            <div className="mt-1 flex flex-wrap items-center gap-3">
               <span className="font-mono text-2xl text-[var(--color-fg)] tracking-tight">
                 {tripRequest.id}
-              </span>
-              <span className="inline-flex items-center gap-2 px-2.5 py-1 border border-[rgba(245,158,11,0.3)] bg-[rgba(245,158,11,0.06)] rounded-sm">
-                <span className="h-1.5 w-1.5 rounded-full bg-[var(--color-warn)] amber-pulse" />
-                <span className="text-xs text-[var(--color-warn)] uppercase tracking-[0.14em]">
-                  {tripRequest.statusLabel}
-                </span>
               </span>
               <Badge variant="gold">
                 {tripRequest.client} — {tripRequest.clientTier}
               </Badge>
             </div>
-            <div className="mt-3 text-sm text-[var(--color-fg-2)]">
+            <div className="mt-2 text-sm text-[var(--color-fg-2)]">
               {tripRequest.booker}, {tripRequest.bookerRole} · created{" "}
               {tripRequest.createdAgo}
             </div>
           </header>
+
+          <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-[var(--color-accent-border)] bg-[var(--color-accent-soft)] px-4 py-3">
+            <div className="flex items-center gap-2 text-sm text-[var(--color-fg)]">
+              <Clock className="h-4 w-4 text-[var(--color-accent)]" />
+              Respond directly to the traveller within 1 hour
+            </div>
+            <SlaCountdown seconds={2820} capMinutes={60} />
+          </div>
 
           <Card>
             <div className="px-7 py-6">
@@ -88,23 +108,55 @@ export default function TripRequestPage() {
             </div>
           </Card>
 
-          <section className="space-y-4">
-            <div className="flex items-baseline justify-between">
-              <h2 className="text-sm uppercase tracking-[0.18em] text-[var(--color-fg-3)]">
-                Operator Quotes
-                <span className="ml-3 text-[var(--color-fg-2)] normal-case tracking-normal">
-                  {received} received · {pending} pending
-                </span>
-              </h2>
-            </div>
-            <Separator />
+          <BrokerOfferComposer
+            budgetMin={tripRequest.budgetMin}
+            budgetMax={tripRequest.budgetMax}
+            client={tripRequest.client}
+          />
 
-            <div className="space-y-4 pt-1">
-              {tripRequest.quotes.map((q, i) => (
-                <QuoteCard key={q.id} quote={q} index={i} />
-              ))}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div>
+              <h2 className="mb-3 text-sm uppercase tracking-[0.18em] text-[var(--color-fg-3)]">
+                Conversation with the traveller
+              </h2>
+              <TripChat
+                name={tripRequest.booker}
+                initials={bookerInitials}
+                role={tripRequest.bookerRole}
+                company={tripRequest.client}
+                greeting={`Hi Sarah — we'd like ${tripRequest.fromCode} to ${tripRequest.toCode} on the 14th, ${tripRequest.pax} guests, ${tripRequest.aircraftPref}. Can Atlas put something together?`}
+                quickReplies={TRAVELLER_QUICK_REPLIES}
+              />
             </div>
-          </section>
+            <div>
+              <h2 className="mb-3 text-sm uppercase tracking-[0.18em] text-[var(--color-fg-3)]">
+                Shared documents
+              </h2>
+              <SelfVault
+                counterparty={tripRequest.client}
+                myDocs={[
+                  {
+                    id: "agreement",
+                    name: "Draft charter agreement",
+                    meta: "Ready to send",
+                  },
+                  { id: "quote", name: "All-in quote (PDF)", meta: "Prepared" },
+                ]}
+                theirDocs={[
+                  {
+                    id: "pax",
+                    name: "Passports · 6 adults + 2 children",
+                    meta: "Provided by traveller",
+                  },
+                  {
+                    id: "kyc",
+                    name: "KYC · Westbourne Family Office",
+                    meta: "Verified",
+                  },
+                ]}
+              />
+            </div>
+          </div>
         </div>
 
         <TrustBrief />

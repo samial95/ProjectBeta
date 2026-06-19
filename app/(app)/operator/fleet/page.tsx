@@ -1,9 +1,11 @@
-import { Plane } from "lucide-react";
+import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
+import { Card } from "@/components/ui/card";
 import { Table, THead, TBody, TR, TH, TD } from "@/components/ui/table";
 import { PageContainer } from "@/components/voyex/page-header";
+import { PageHeading } from "@/components/voyex/page-heading";
 import { sovereignFleet, type FleetAircraft } from "@/lib/operator-data";
+import { aircraftImage } from "@/lib/aircraft-image";
 import { cn } from "@/lib/utils";
 
 const STATUS_STYLE: Record<
@@ -43,17 +45,11 @@ export default function FleetPage() {
 
   return (
     <PageContainer>
-      <header className="mb-8">
-        <div className="flex items-baseline justify-between gap-4 flex-wrap">
-          <div>
-            <div className="text-[11px] uppercase tracking-[0.18em] text-[var(--color-fg-3)]">
-              Fleet
-            </div>
-            <h1 className="font-serif text-[28px] leading-tight text-[var(--color-fg)] mt-1 flex items-center gap-3">
-              <Plane className="h-5 w-5 text-[var(--color-accent)]" />
-              {sovereignFleet.length} aircraft
-            </h1>
-          </div>
+      <PageHeading
+        eyebrow="Operator workspace"
+        title="My Fleet"
+        sub={`${sovereignFleet.length} aircraft`}
+        right={
           <div className="flex items-center gap-2 flex-wrap">
             {(
               Object.entries(STATUS_STYLE) as [
@@ -70,17 +66,14 @@ export default function FleetPage() {
               </Badge>
             ))}
           </div>
-        </div>
-      </header>
+        }
+      />
 
-      <Separator className="mb-2" />
-
-      <div className="border border-[var(--color-border)] bg-[var(--color-surface)] rounded-sm overflow-hidden">
+      <Card className="overflow-hidden">
         <Table>
           <THead>
             <TR>
-              <TH className="pl-6">Tail</TH>
-              <TH>Aircraft</TH>
+              <TH className="pl-6">Aircraft</TH>
               <TH>Year · hrs</TH>
               <TH>Location</TH>
               <TH>Next maintenance</TH>
@@ -92,10 +85,27 @@ export default function FleetPage() {
               const s = STATUS_STYLE[a.status];
               return (
                 <TR key={a.tail} className="last:border-b-0">
-                  <TD className="pl-6 font-mono text-[13px] text-[var(--color-fg)]">
-                    {a.tail}
+                  <TD className="pl-6">
+                    <div className="flex items-center gap-3">
+                      <div className="relative h-10 w-16 shrink-0 overflow-hidden rounded-md border border-[var(--color-border)]">
+                        <Image
+                          src={aircraftImage(a.type)}
+                          alt={a.type}
+                          fill
+                          sizes="64px"
+                          className="object-cover"
+                        />
+                      </div>
+                      <div className="min-w-0">
+                        <div className="text-sm text-[var(--color-fg)]">
+                          {a.type}
+                        </div>
+                        <div className="font-mono text-[11px] text-[var(--color-fg-3)]">
+                          {a.tail}
+                        </div>
+                      </div>
+                    </div>
                   </TD>
-                  <TD className="text-sm text-[var(--color-fg)]">{a.type}</TD>
                   <TD className="font-mono text-[12px] text-[var(--color-fg-2)]">
                     {a.yearBuild} · {a.hoursSinceNew.toLocaleString()}
                   </TD>
@@ -107,9 +117,7 @@ export default function FleetPage() {
                   </TD>
                   <TD className="pr-6">
                     <div className={cn("inline-flex items-center gap-2 text-[12px]", s.text)}>
-                      <span
-                        className={cn("h-1.5 w-1.5 rounded-full", s.dot)}
-                      />
+                      <span className={cn("h-1.5 w-1.5 rounded-full", s.dot)} />
                       {s.label}
                     </div>
                     {a.statusNote && (
@@ -123,7 +131,7 @@ export default function FleetPage() {
             })}
           </TBody>
         </Table>
-      </div>
+      </Card>
     </PageContainer>
   );
 }

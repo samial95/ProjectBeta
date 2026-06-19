@@ -92,13 +92,16 @@ export default function ClientTripsPage() {
       </Card>
 
       {/* Offers grid */}
-      <div className="flex items-baseline justify-between mb-4">
+      <div className="mb-4">
         <h2 className="text-sm uppercase tracking-[0.18em] text-[var(--color-fg-3)]">
-          Broker offers
+          Offers
           <span className="ml-3 text-[var(--color-fg-2)] normal-case tracking-normal">
-            tap to compare · select one to continue
+            direct from brokers &amp; operators · tap to compare · select one to continue
           </span>
         </h2>
+        <p className="mt-1 text-xs text-[var(--color-fg-3)]">
+          Operators respond within 30 minutes · brokers within 1 hour.
+        </p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5 items-stretch">
@@ -109,8 +112,8 @@ export default function ClientTripsPage() {
 
       <div className="mt-8 text-center">
         <p className="text-xs text-[var(--color-fg-3)]">
-          All brokers are vetted by Voyex. Your deposit is held in escrow and
-          fully protected until departure.
+          All brokers are vetted by Voyex. Your payment is held in escrow and
+          fully protected until your aircraft is confirmed.
         </p>
       </div>
     </PageContainer>

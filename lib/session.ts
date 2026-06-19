@@ -1,4 +1,4 @@
-export type Role = "broker" | "operator" | "customer";
+export type Role = "broker" | "operator" | "customer" | "ambassador";
 
 export interface Session {
   role: Role;
@@ -14,11 +14,11 @@ export const SESSION_MAX_AGE_SECONDS = 60 * 60 * 24 * 7;
 
 export const BROKER_SESSION: Session = {
   role: "broker",
-  email: "sarah.chen@voyex.capital",
+  email: "sarah.chen@atlasprivatejets.com",
   name: "Sarah Chen",
-  org: "Voyex Capital",
+  org: "Atlas Private Jets",
   initials: "SC",
-  subtitle: "Senior Charter Broker · Voyex Capital",
+  subtitle: "Senior Broker · Atlas Private Jets",
 };
 
 export const OPERATOR_SESSION: Session = {
@@ -39,9 +39,19 @@ export const CUSTOMER_SESSION: Session = {
   subtitle: "Principal · Westbourne Family Office",
 };
 
+export const AMBASSADOR_SESSION: Session = {
+  role: "ambassador",
+  email: "olivia@marchetti.co",
+  name: "Olivia Marchetti",
+  org: "Voyex Ambassadors",
+  initials: "OM",
+  subtitle: "Ambassador · Voyex",
+};
+
 export function sessionFor(role: Role): Session {
   if (role === "broker") return BROKER_SESSION;
   if (role === "operator") return OPERATOR_SESSION;
+  if (role === "ambassador") return AMBASSADOR_SESSION;
   return CUSTOMER_SESSION;
 }
 
@@ -56,7 +66,8 @@ export function decodeSession(raw: string | undefined): Session | null {
     if (
       parsed.role !== "broker" &&
       parsed.role !== "operator" &&
-      parsed.role !== "customer"
+      parsed.role !== "customer" &&
+      parsed.role !== "ambassador"
     )
       return null;
     return parsed;
@@ -68,5 +79,6 @@ export function decodeSession(raw: string | undefined): Session | null {
 export function homeForRole(role: Role): string {
   if (role === "broker") return "/trips";
   if (role === "operator") return "/operator";
+  if (role === "ambassador") return "/ambassador";
   return "/client";
 }

@@ -32,8 +32,8 @@ function TrustRow({
 export function TrustBrief() {
   const t = tripRequest.trust;
   return (
-    <aside className="w-[320px] shrink-0 sticky top-0 h-fit">
-      <div className="border border-[var(--color-border)] rounded-sm bg-[var(--color-surface)]">
+    <aside className="w-full xl:w-[320px] shrink-0 xl:sticky xl:top-0 h-fit">
+      <div className="border border-[var(--color-border)] rounded-xl navy-panel panel-shadow backdrop-blur-sm">
         <div className="px-5 pt-5 pb-3">
           <div className="font-serif text-[var(--color-fg)] text-lg leading-tight">
             Trip Trust Brief
